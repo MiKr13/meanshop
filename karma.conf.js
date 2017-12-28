@@ -18,6 +18,16 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
+      'client/bower_components/jquery/dist/jquery.js',
+      'client/bower_components/angular/angular.js',
+      'client/bower_components/angular-resource/angular-resource.js',
+      'client/bower_components/angular-cookies/angular-cookies.js',
+      'client/bower_components/angular-sanitize/angular-sanitize.js',
+      'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/angular-socket-io/socket.js',
+      'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'client/bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'node_modules/socket.io-client/socket.io.js',
       'client/app/app.js',
@@ -97,6 +107,16 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: false,
+    plugins : [
+      'karma-phantomjs-launcher', 
+      'karma-ng-jade2js-preprocessor', 
+      'karma-ng-html2js-preprocessor', 
+      'karma-babel-preprocessor', 
+      'karma-coffee-preprocessor', 
+      'karma-spec-reporter', 
+      'karma-mocha',
+      'karma-chai-plugins'
+    ]
   });
 };
