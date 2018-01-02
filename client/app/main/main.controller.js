@@ -1,27 +1,8 @@
 'use strict';
 
 angular.module('meanshopApp')
-  .controller('MainCtrl', function($scope, $http, socket) {
-    $scope.awesomeThings = [];
+  .controller('MainCtrl', ['$scope', 'Products', function($scope, Products) {
 
-    $http.get('/api/things').success(function(awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
-      socket.syncUpdates('thing', $scope.awesomeThings);
-    });
+    $scope.products = Products.query().slice(2);
 
-    $scope.addThing = function() {
-      if ($scope.newThing === '') {
-        return;
-      }
-      $http.post('/api/things', { name: $scope.newThing });
-      $scope.newThing = '';
-    };
-
-    $scope.deleteThing = function(thing) {
-      $http.delete('/api/things/' + thing._id);
-    };
-
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('thing');
-    });
-  });
+  }]);
