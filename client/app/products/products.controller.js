@@ -21,8 +21,11 @@ angular.module('meanshopApp')
      * DELETE a single product
      */ 
     $scope.deleteProduct = function(){
-      Products.delete($scope.product);
-      $state.go('products');
+      Products.delete({id: $scope.product._id}, function(response) {
+        $state.go('products');
+      }, function(errorResponse) {
+        $scope.errors = errorResponse.data.message;
+      } );
     }
   }])
 
@@ -36,8 +39,11 @@ angular.module('meanshopApp')
      * CREATE a new product
      */
     $scope.addProduct = function(){
-      Products.create($scope.product); // modeled in the view-form
-      $state.go('products');
+      Products.save($scope.product, function(response) {
+        $state.go('products');
+      }, function(errorResponse) {
+        $scope.errors = errorResponse.data.message;
+      }); // modeled in the view-form
     }
   }])
 
@@ -51,7 +57,10 @@ angular.module('meanshopApp')
      * UPDATE a single product
      */
     $scope.editProduct = function(){
-      Products.update($scope.product);
-      $state.go('products');
+      Products.update({id: $scope.product._id}, $scope.product, function(response) {
+        $state.go('viewProduct', {id: response._id});
+      }, function(errorResponse) {
+        $scope.errors = errorResponse.data.message;
+      });
     }
   }]);
