@@ -18,6 +18,13 @@ var ProductSchema = new Schema({
 	stock: {
 		type: Number,
 		default: 1
+	},
+	imageBin: {
+		data: Buffer,
+		contentType: String
+	},
+	imageUrl: {
+		type: String
 	}
 });
 

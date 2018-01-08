@@ -48,7 +48,8 @@ angular.module('meanshopApp')
   }])
 
   .controller('ProductEditCtrl', ['$scope', '$state', '$stateParams', 'Products', 
-    function ($scope, $state, $stateParams, Products) {
+		'Upload', '$timeout',
+    function ($scope, $state, $stateParams, Products, Upload, $timeout) {
 
     // target current product
     $scope.product = Products.get({id: $stateParams.id});
@@ -58,9 +59,51 @@ angular.module('meanshopApp')
      */
     $scope.editProduct = function(){
       Products.update({id: $scope.product._id}, $scope.product, function(response) {
-        $state.go('viewProduct', {id: response._id});
-      }, function(errorResponse) {
-        $scope.errors = errorResponse.data.message;
+				$state.go('viewProduct', {id: response._id});
+			}, function(errorResponse) {
+				$scope.errors = errorResponse.data.message;
       });
-    }
+    };
+
+		/**
+		 * UPLOAD image action
+		 */
+		$scope.upload = uploadHander($scope, Upload, $timeout);
+
   }]);
+
+var uploadHander = function ($scope, Upload, $timeout) {
+	/**
+	 * Upload image file
+	 * @param {object} file Image file selected or dragged from view : $file
+	 */
+	return function(file) {
+		if (file && !file.$error) {
+
+			// make file avaiable in to the view for preview
+			$scope.file = file;
+
+			// Promise: to return the uploaded file
+			file.upload = Upload.upload({
+				url: '/api/products/' + $scope.product._id + '/upload', // POST request
+				file: file
+			});
+
+			file.upload.then(function (response) {
+				$timeout(function () {
+					file.result = response.data;
+				});
+			}, function (response) {
+				if (response.status > 0){
+					console.log(response.status + ': ' + response.data);
+					$scope.errors = response.status + ': ' + response.data;
+				}
+			});
+
+			file.upload.progress(function (evt) {
+				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			});
+		}
+	};
+};
+

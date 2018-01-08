@@ -4,15 +4,23 @@
    <div class="row">
 
       <h1>Products</h1>
+      <form>
+         <p class="input-group">
+         <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary" ui-sref="newProduct()">Add New</button>
+         </span>
+         </p>
+      </form>
       <div class="col-sm-6 col-md-4" data-ng-show="products.length < 1"> 
          No products to show.
          <a ui-sref="newProduct">New Product</a>
       </div>
 
-
       <div class="col-sm-6 col-md-4" data-ng-repeat="product in products">
          <div class="thumbnail">
-            <img src="http://placehold.it/300x200" alt="{{product.title}}">
+            <a ui-sref="viewProduct({id: product._id})">
+               <img src="{{product.imageUrl}}" alt="{{product.title}}">
+            </a>
             <div class="caption">
                <h3>{{product.title}}</h3>
                <p>{{product.description | limitTo: 100}} ...</p>

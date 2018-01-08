@@ -2,9 +2,26 @@
 
 <div class="container">
    <h1>Edit a product</h1>
+
+   <div class="container">
+      <div class="row">
+         <div ng-show="file">
+            <img class="img-responsive edit-preview" ngf-src="file"
+            alt="{{product.title}}">
+         </div>
+         <div ng-hide="file">
+            <img class="img-responsive edit-preview" ng-src="{{product.imageUrl}}"
+            alt="{{product.title}}">
+         </div>
+         <div class="caption">
+            <h5 ng-show="product.imageUrl" class="text-center">Current image</h5>
+            <h5 ng-show="!product.imageUrl" class="text-center">There is not image yet</h5>
+         </div>
+      </div>
+   </div>
+   &nbsp;
    <form class="form-horizontal" role="form" data-ng-submit="editProduct()">
       <div data-ng-include="'app/products/templates/_product_form.html'"></div>
-      <a ui-sref="products" class="btn btn-default" role="button">Back</a>
    </form>
 </div><!-- end .container -->
 
