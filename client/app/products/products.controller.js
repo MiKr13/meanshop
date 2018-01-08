@@ -21,8 +21,11 @@ angular.module('meanshopApp')
      * DELETE a single product
      */ 
     $scope.deleteProduct = function(){
-      Products.delete($scope.product);
-      $state.go('products');
+      Products.delete({id: $scope.product._id}, function(response) {
+        $state.go('products');
+      }, function(errorResponse) {
+        $scope.errors = errorResponse.data.message;
+      } );
     }
   }])
 
@@ -36,13 +39,17 @@ angular.module('meanshopApp')
      * CREATE a new product
      */
     $scope.addProduct = function(){
-      Products.create($scope.product); // modeled in the view-form
-      $state.go('products');
+      Products.save($scope.product, function(response) {
+        $state.go('products');
+      }, function(errorResponse) {
+        $scope.errors = errorResponse.data.message;
+      }); // modeled in the view-form
     }
   }])
 
   .controller('ProductEditCtrl', ['$scope', '$state', '$stateParams', 'Products', 
-    function ($scope, $state, $stateParams, Products) {
+		'Upload', '$timeout',
+    function ($scope, $state, $stateParams, Products, Upload, $timeout) {
 
     // target current product
     $scope.product = Products.get({id: $stateParams.id});
@@ -51,7 +58,52 @@ angular.module('meanshopApp')
      * UPDATE a single product
      */
     $scope.editProduct = function(){
-      Products.update($scope.product);
-      $state.go('products');
-    }
+      Products.update({id: $scope.product._id}, $scope.product, function(response) {
+				$state.go('viewProduct', {id: response._id});
+			}, function(errorResponse) {
+				$scope.errors = errorResponse.data.message;
+      });
+    };
+
+		/**
+		 * UPLOAD image action
+		 */
+		$scope.upload = uploadHander($scope, Upload, $timeout);
+
   }]);
+
+var uploadHander = function ($scope, Upload, $timeout) {
+	/**
+	 * Upload image file
+	 * @param {object} file Image file selected or dragged from view : $file
+	 */
+	return function(file) {
+		if (file && !file.$error) {
+
+			// make file avaiable in to the view for preview
+			$scope.file = file;
+
+			// Promise: to return the uploaded file
+			file.upload = Upload.upload({
+				url: '/api/products/' + $scope.product._id + '/upload', // POST request
+				file: file
+			});
+
+			file.upload.then(function (response) {
+				$timeout(function () {
+					file.result = response.data;
+				});
+			}, function (response) {
+				if (response.status > 0){
+					console.log(response.status + ': ' + response.data);
+					$scope.errors = response.status + ': ' + response.data;
+				}
+			});
+
+			file.upload.progress(function (evt) {
+				file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+			});
+		}
+	};
+};
+
