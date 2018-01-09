@@ -118,7 +118,11 @@ module.exports = function(config) {
       'karma-coffee-preprocessor', 
       'karma-spec-reporter', 
       'karma-mocha',
-      'karma-chai-plugins'
+      'karma-chai-plugins',
+      'sinon-chai',
+      'mocha',
+      'chai-things',
+      'chai-as-promised'
     ]
   });
 };
