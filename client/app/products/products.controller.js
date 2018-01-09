@@ -24,7 +24,7 @@ angular.module('meanshopApp')
       Products.delete({id: $scope.product._id}, function(response) {
         $state.go('products');
       }, function(errorResponse) {
-        $scope.errors = errorResponse.data.message;
+        $scope.errors = errorResponse;
       } );
     }
   }])
@@ -42,7 +42,7 @@ angular.module('meanshopApp')
       Products.save($scope.product, function(response) {
         $state.go('products');
       }, function(errorResponse) {
-        $scope.errors = errorResponse.data.message;
+        $scope.errors = errorResponse;
       }); // modeled in the view-form
     }
   }])
@@ -61,7 +61,7 @@ angular.module('meanshopApp')
       Products.update({id: $scope.product._id}, $scope.product, function(response) {
 				$state.go('viewProduct', {id: response._id});
 			}, function(errorResponse) {
-				$scope.errors = errorResponse.data.message;
+				$scope.errors = errorResponse;
       });
     };
 
