@@ -1,0 +1,19 @@
+<span ng-hide="attrs.id">
+	 <a class="btn btn-primary" ng-disabled="true" ng-transclude></a>
+</span>
+<span ng-show="attrs.id">
+	 <span ng-show="!inCart()">
+			<span ng-show="quantityMax">
+         <select class="form-control" style="width: 50px; display: inline-block" name="quantity" id="quantity" ng-model="q" ng-options=" v for v in qtyOpt"></select>
+			</span>
+			<a class="btn btn-primary" ng-click="ngCart.addItem(id, name, price, q, data)" ng-transclude></a>
+	 </span>
+	 <mark  ng-show="inCart()">
+   <a ng-init="value = 'Added'"
+      class="ng-class: btn btn-{{btnType}} | btn btn-success"
+      ng-mouseover="btnType = 'danger'; value = 'Remove'"
+      ng-mouseleave="btnType = 'success'; value = 'Added'"
+      ng-click="ngCart.removeItemById(id)" >
+      <span class="fa fa-shopping-cart"></span> {{value}}</a>
+	 </mark>
+</span>

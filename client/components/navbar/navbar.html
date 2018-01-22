@@ -1,4 +1,4 @@
-<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarCtrl">
+<div class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
@@ -23,6 +23,12 @@
         <li ng-show="isLoggedIn()"><p class="navbar-text">Hello {{ getCurrentUser().name }}</p> </li>
         <li ng-show="isLoggedIn()" ui-sref-active="active"><a ui-sref="settings"><span class="glyphicon glyphicon-cog"></span></a></li>
         <li ng-show="isLoggedIn()"><a ui-sref="logout">Logout</a></li>
+        <li>
+           <a ui-sref="checkout">
+              <ngcart-summary template-url="components/ngcart/summary.html">
+              </ngcart-summary>
+           </a>
+        </li>
       </ul>
     </div>
   </div>

@@ -70,7 +70,50 @@ angular.module('meanshopApp')
 		 */
 		$scope.upload = uploadHander($scope, Upload, $timeout);
 
-  }]);
+  }])
+
+	/**
+	 * Request path to request a braintree client token
+	 */
+  .constant('clientTokenPath', '/api/braintree/client_token')
+
+	.controller('ProductCheckoutCtrl', ['$scope', '$http', '$state', 'ngCart', 
+		function($scope, $http, $state, ngCart) {
+
+		$scope.errors = '';
+
+		$scope.paymentOptions = {
+			/**
+			 * Callback if card/paypal information gets authorization from bt servers
+			 * @param {Object} payload Object used to execute the payment in NodeJS side	
+			 *
+			 * payload is conformed by: nonce, details [], cardType, and type properties
+			*/
+			onPaymentMethodReceived: function(payload) {
+
+				/**
+				 * Serialize the shoopping cart and add/merge it to payload object
+				 * ngCart includes: items [], shipping, subTotal, tax, taxRate, total, and totalCost properties
+				 */				
+				angular.merge(payload, ngCart.toObject());
+				payload.total = payload.totalCost;
+				console.error(payload);
+
+				/**
+				 * Create/send an order to the server	
+ 				*/
+				$http.post('/api/order', payload)
+				// if backend was able to collect the payment
+					.then(function success () {
+						ngCart.empty(true);
+						$state.go('products');
+					}, function error (res) {
+						$scope.errors = res;
+					});
+			}
+		};
+
+	}]);
 
 var uploadHander = function ($scope, Upload, $timeout) {
 	/**

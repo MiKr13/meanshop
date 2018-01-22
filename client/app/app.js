@@ -7,7 +7,9 @@ angular.module('meanshopApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'ngFileUpload'
+  'ngFileUpload',
+  'ngCart',
+  'braintree-angular'
 ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
