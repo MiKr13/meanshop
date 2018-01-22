@@ -60,7 +60,14 @@ var all = {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+  },
+
+  braintree: {
+    clientID:       process.env.BRAINTREE_ID || 'id',
+    clientSecret:   process.env.BRAINTREE_SECRET || 'secret',
+    clientMerchant: process.env.BRAINTREE_MERCHANT || 'merchant'
   }
+
 };
 
 // Export the config object based on the NODE_ENV
