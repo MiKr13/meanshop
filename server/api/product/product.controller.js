@@ -12,6 +12,7 @@
 var _ = require('lodash');
 var Product = require('./product.model');
 var path = require('path');
+var Catalog = require('../catalog/catalog.model');
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
@@ -71,6 +72,20 @@ function saveFile(res, file) {
 	}
 }
 
+/**
+ * Extract products in catalog
+ * @param {Object} catalog Catalog retrieved in last promise
+ * @return {Array} Product list
+ */
+function productsInCategory(catalog) {
+	// Create array of catalog's ids
+  var catalog_ids = [catalog._id].concat(catalog.children);
+  return Product
+    .find({'categories': { $in: catalog_ids } })
+    .populate('categories')
+    .exec();
+}
+
 // Gets a list of Products
 exports.index = function(req, res) {
   Product.findAsync()
@@ -125,4 +140,25 @@ exports.upload = function(req, res) {
 		.then(saveFile(res, file))
 		.then(responseWithResult(res))
 		.catch(handleError(res));
+};
+
+exports.catalog = function(req, res) {
+  Catalog
+		// find the category ID by the slug
+    .findOne({ slug: req.params.slug }) 
+    .execAsync()
+		// find all the products that match category's ID of category's children
+    .then(productsInCategory)           
+    .then(responseWithResult(res))
+    .catch(handleError(res));
+};
+
+exports.search = function(req, res) {
+  Product
+		// search in all fields which have text indexes
+    .find({ $text: { $search: req.params.term }})
+    .populate('categories')
+    .execAsync()
+    .then(responseWithResult(res))
+    .catch(handleError(res));
 };

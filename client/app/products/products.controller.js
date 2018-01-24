@@ -8,7 +8,22 @@ angular.module('meanshopApp')
      */
     $scope.products = Products.query();
 
+		$scope.$on('search:term', function(event, data) {
+			if (data.length) {
+				$scope.products = Products.search({id: data});
+        $scope.query = data;
+			} else {
+				$scope.products = Products.query();
+        $scope.query = '';
+			}
+		});
+
   }])
+
+	.controller('ProductCatalogCtrl', ['$scope', '$stateParams', 'Products', function($scope, $stateParams, Products) {
+		$scope.products = Products.catalog({id: $stateParams.slug});
+    $scope.query = $stateParams.slug;
+	}])
 
   .controller('ProductViewCtrl', ['$scope', '$state', '$stateParams', 'Products', 
     function ($scope, $state, $stateParams, Products) {

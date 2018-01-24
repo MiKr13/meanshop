@@ -25,7 +25,15 @@ var ProductSchema = new Schema({
 	},
 	imageUrl: {
 		type: String
-	}
-});
+	},
+	categories: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Catalog',
+		index: true }]
+	})
+	.index({
+		'title': 'text',
+	  'description': 'text'	
+	});
 
 module.exports = mongoose.model('Product', ProductSchema);
