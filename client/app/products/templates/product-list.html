@@ -3,7 +3,7 @@
 <div class="container">
    <div class="row">
 
-      <h1>Products</h1>
+      <h1 class="page-header">Products <small>{{query}}</small></h1>
       <form>
          <p class="input-group">
          <span class="input-group-btn">
@@ -11,12 +11,15 @@
          </span>
          </p>
       </form>
-      <div class="col-sm-6 col-md-4" data-ng-show="products.length < 1"> 
+
+      <div class="col-md-3" ng-include="'components/sidebar/sidebar.html'"></div>
+
+      <div class="col-md-3" data-ng-show="products.length < 1"> 
          No products to show.
          <a ui-sref="newProduct">New Product</a>
       </div>
 
-      <div class="col-sm-6 col-md-4" data-ng-repeat="product in products">
+      <div class="col-md-3" data-ng-repeat="product in products">
          <div class="thumbnail">
             <a ui-sref="viewProduct({id: product._id})">
                <img src="{{product.imageUrl}}" alt="{{product.title}}">
