@@ -11,15 +11,15 @@ angular.module('meanshopApp', [
   'ngCart',
   'braintree-angular'
 ])
-  .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
-  })
+  } ])
 
-  .factory('authInterceptor', function($rootScope, $q, $cookies, $injector) {
+  .factory('authInterceptor', ['$rootScope', '$q', '$cookies', '$injector', function($rootScope, $q, $cookies, $injector) {
     var state;
     return {
       // Add authorization token to headers
@@ -44,9 +44,9 @@ angular.module('meanshopApp', [
         }
       }
     };
-  })
+  } ])
 
-  .run(function($rootScope, $state, Auth) {
+  .run(['$rootScope', '$state', 'Auth', function($rootScope, $state, Auth) {
     // Redirect to login if route requires auth and the user is not logged in
     $rootScope.$on('$stateChangeStart', function(event, next) {
       if (next.authenticate) {
@@ -58,4 +58,4 @@ angular.module('meanshopApp', [
         });
       }
     });
-  });
+  } ]);

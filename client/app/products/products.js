@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('meanshopApp')
-   .config(function ($stateProvider) {
+   .config(['$stateProvider', function ($stateProvider) {
       $stateProvider
          .state('products', {
             url: '/products',
@@ -36,4 +36,4 @@ angular.module('meanshopApp')
             templateUrl: 'app/products/templates/product-list.html',
             controller: 'ProductCatalogCtrl'
          });
-   });
+   } ]);
